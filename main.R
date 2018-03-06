@@ -33,14 +33,36 @@ name <- as.character(name)
 print(name)
 colnames(result)[which(names(result) == "Value")] <- name
 
+i <- 2
+while(i < 40){
+  result2 <- Quandl(paste0("ZILLOW/CO",codes[i],"_PRRAH"))
+  name <- filter(binge.WA, code == codes[i])[1,2]
+  name <- as.character(droplevels(name))
+  colnames(result2)[2] <- name
+  result <- left_join(result, result2, by = "Date")
+  Sys.sleep(0.05)
+  i <- i+1
+}
+
 ##attempt to loop through codes vector and left_join each result2 to result
-for(i in 2:39)
+for(i in 2:6)
 {
   result2 <- Quandl(paste0("ZILLOW/CO",codes[i],"_PRRAH"))
   name <- filter(binge.WA, code == codes[i])[1,2]
   name <- as.character(droplevels(name))
-  colnames(result2)[which<names(result2) == "Value"] <- name
-  result <- left_join(result, result2)
+  colnames(result2)[2] <- name
+  result <- left_join(result, result2, by = "Date")
+  Sys.sleep(0.05)
+}
+
+for(i in 10:13)
+{
+  result2 <- Quandl(paste0("ZILLOW/CO",codes[i],"_PRRAH"))
+  name <- filter(binge.WA, code == codes[i])[1,2]
+  name <- as.character(droplevels(name))
+  colnames(result2)[2] <- name
+  result <- left_join(result, result2, by = "Date")
+  Sys.sleep(0.05)
 }
 
 ########################
@@ -52,10 +74,10 @@ misery.data <- Quandl('USMISERY/INDEX', start_date='2002-01-01', end_date='2012-
 
 
 Quandl.api_key(quandl.key)
-Quandl(paste0("ZILLow/CO"))
+
 x <- Quandl("ZILLOW/CO100_PRRAH")
 result <- Quandl("ZILLOW/CO2254_PRRAH")
-name <- filter(binge.WA, code == "2556")[1,2]
+name <- filter(binge.WA,code== codes[39])[1,2]
 name <- droplevels(name)
 name <- as.character(name)
 print(name)
