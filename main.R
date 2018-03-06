@@ -1,3 +1,8 @@
+##https://www.quandl.com/data/USMISERY-United-States-Misery-Index/usage/quickstart/r
+
+##https://www.quandl.com/data/ZILLOW-Zillow-Real-Estate-Research
+
+
 #####Olivia's work#######
 library("dplyr")
 library("httr")
@@ -45,6 +50,16 @@ for(i in 2:39)
 misery.data <- Quandl('USMISERY/INDEX', start_date='2002-01-01', end_date='2012-12-31')
 
 
+
+Quandl.api_key(quandl.key)
+Quandl(paste0("ZILLow/CO"))
+x <- Quandl("ZILLOW/CO100_PRRAH")
+result <- Quandl("ZILLOW/CO2254_PRRAH")
+name <- filter(binge.WA, code == "2556")[1,2]
+name <- droplevels(name)
+name <- as.character(name)
+print(name)
+colnames(result)[which(names(result) == "Value")] <- name
 ##here to test for loop
 # for(j in 1:10)
 # {
