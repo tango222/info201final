@@ -4,14 +4,25 @@ library("jsonlite")
 source("APIKeys.R")
 library(Quandl)
 
-codes <- c("2254","1842", "235", "466", "1434", "113", "2556","362","706", "2414", "441","1152",
+
+mort <- read.csv("data/mort.csv")
+
+mort <- filter(mort, FIPS == 1)
+
+categories <- mort$Category
+
+categories <- as.vector(categories)
+
+  codes <- c("2254","1842", "235", "466", "1434", "113", "2556","362","706", "2414", "441","1152",
            "406","465","437", "793","11","176","687","1862", "453","2533","523","685","908"
            ,"1033","52","984","331","1056","62", "100", "654", "175", "1143", "537", "209", "1571", "179")
-
+4
 binge.drinking <- read.csv("data/binge_drinking.csv")
 binge.WA <- filter(binge.drinking, state == "Washington")
 binge.WA <- filter(binge.WA, location != "Washington")
 
+
+binge.drinking <- read.csv("data/mort.csv")
 binge.WA$code <- codes
 ##indicator code : Price to Rent Ratio (PRRAH)
 
