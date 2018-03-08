@@ -1,8 +1,5 @@
 ##https://www.quandl.com/data/USMISERY-United-States-Misery-Index/usage/quickstart/r
 
-##https://www.quandl.com/data/ZILLOW-Zillow-Real-Estate-Research
-
-
 #####Olivia's work#######
 library("dplyr")
 library("httr")
@@ -53,23 +50,3 @@ binge.drinking.com <- mutate(binge.drinking.both.avg, mean.male = binge.drinking
 
 bing.drinking.com.state <- filter(binge.drinking.com, state == location)
 
-
-# info <- select(binge.drinking.com, 1,2, paste0("mean.", 'male'))
-# info <- filter(info, state == location)
-# info.b <- select(info, 1, 3)
-# info.m <- filter(mort.state, Category == 'Unintentional injuries')
-# mort <- info.m
-# mort <- mutate(mort, region = tolower(Location))
-# mort <- select(mort, 5,4)
-# binge <- info.b
-# binge <- mutate(binge, region = tolower(state))
-# binge <- select(binge, 3,2)
-# both <- left_join(mort, binge, by = 'region')
-# both <- mutate(both, scale = both[ ,3] / both[ ,2])
-# both$level <- cut(both[ ,4], breaks = 5)
-# map.US <- left_join(map.US, both, by = 'region')
-# ggplot(data = map.US) +
-#   geom_polygon(mapping = aes(x = long, y = lat, group = group, fill = level, color = "Black"))+
-#   scale_fill_brewer(palette = "Purples")+
-#   theme_bw()+
-#   coord_quickmap()

@@ -3,6 +3,7 @@ library(ggplot2)
 library(dplyr)
 library('maps')
 source("main.R")
+source('spatial_utils.R')
 
 ui <- fluidPage(
   
@@ -27,13 +28,20 @@ ui <- fluidPage(
                   choices= mort.Alabama$Category, selected = "Neonatal Disorders")),
     
     mainPanel(
-      tabsetPanel(type = "tabs",
-                  tabPanel("descript", h2("Description"),verbatimTextOutput("info")),
-                  tabPanel("Binge"),
-                  tabPanel("Category", dataTableOutput('table')),
-                  tabPanel("Map: Binge Drinking", plotOutput("binge")),
-                  tabPanel("Map: Mortality Rate", plotOutput("mort")),
-                  tabPanel("Map: Mortality Rate vs Binge Drinking", plotOutput("both"))
+      fluidRow(
+        column(8, tabsetPanel(
+          type = "tabs",
+                              tabPanel("descript", h2("Description"),verbatimTextOutput("info")),
+                              tabPanel("Binge"),
+                              tabPanel("Map: Binge Drinking", h2("Binge Drinking Percent"), plotOutput("binge",click = "plot_click")),
+                              tabPanel("Map: Mortality Rate", h2('Mortality Rate'), plotOutput("mort",click = "plot_click")),
+                              tabPanel("Map: Mortality Rate vs Binge Drinking", h2('Mortality Rate vs Binge Drinking'), plotOutput("both", click = "plot_click"))
+        )
+        ),
+        column(4,
+               verbatimTextOutput("info"), br(),
+               dataTableOutput('table')
+        )
       )
     )
   )
@@ -57,11 +65,12 @@ server <- function(input, output) {
     mort <- filter.mort.state.category()
     mort <- mutate(mort, region = tolower(Location))
     mort <- select(mort, 5,4)
-    mort$level <- cut(mort[ ,2], breaks = 5)
+    mort$level <- cut(mort[ ,2], breaks = 8)
     map.US <- left_join(map.US, mort, by = 'region')
     ggplot(data = map.US) +
       geom_polygon(mapping = aes(x = long, y = lat, group = group, fill = level, color = "Black"))+
-      scale_fill_brewer(palette = "Purples")+
+      scale_fill_brewer(palette = "Greens", direction = -1)+
+      ggtitle(input$category) +
       theme_bw()
   })
   
@@ -69,11 +78,11 @@ server <- function(input, output) {
     binge <- filter.binge.mean.state()
     binge <- mutate(binge, region = tolower(state))
     binge <- select(binge, 3,2)
-    binge$level <- cut(binge[ ,2], breaks = 5)
+    binge$level <- cut(binge[ ,2], breaks = 8)
     map.US <- left_join(map.US, binge, by = 'region')
     ggplot(data = map.US) +
       geom_polygon(mapping = aes(x = long, y = lat, group = group, fill = level, color = "Black"))+
-      scale_fill_brewer(palette = "Purples")+
+      scale_fill_brewer(palette = "Oranges", direction = -1)+
       theme_bw()
   })
   
@@ -86,12 +95,16 @@ server <- function(input, output) {
     binge <- select(binge, 3,2)
     both <- left_join(mort, binge, by = 'region')
     both <- mutate(both, scale = both[ ,3] / both[ ,2])
-    both$level <- cut(both[ ,'scale'], breaks = 5)
+    both$level <- cut(both[ ,'scale'], breaks = 8)
     map.US <- left_join(map.US, both, by = 'region')
     ggplot(data = map.US) +
       geom_polygon(mapping = aes(x = long, y = lat, group = group, fill = level, color = "Black"))+
-      scale_fill_brewer(palette = "Purples")+
+      scale_fill_brewer(palette = "Purples", direction = -1)+
       theme_bw()
+  })
+  
+  output$time.plot <- renderPlot({
+    
   })
   
   output$table <- renderDataTable({
@@ -99,7 +112,7 @@ server <- function(input, output) {
   })
   
   output$info <- renderText({
-    paste(input$category)
+    paste(GetCountryAtPoint(input$plot_click$x, input$plot_click$y))
   })
 }
 
