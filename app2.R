@@ -31,7 +31,6 @@ ui <- fluidPage(
       fluidRow(
         column(8, tabsetPanel(
           type = "tabs",
-                              tabPanel("descript", h2("Description"),verbatimTextOutput("info")),
                               tabPanel("Binge"),
                               tabPanel("Map: Binge Drinking", h2("Binge Drinking Percent"), plotOutput("binge",click = "plot_click")),
                               tabPanel("Map: Mortality Rate", h2('Mortality Rate'), plotOutput("mort",click = "plot_click")),
@@ -39,8 +38,10 @@ ui <- fluidPage(
         )
         ),
         column(4,
-               verbatimTextOutput("info"), br(),
-               dataTableOutput('table')
+               tabsetPanel(
+                 tabPanel("tableTab",  dataTableOutput('table') ),
+                 tabPanel("infoTab", verbatimTextOutput('info'))
+               )
         )
       )
     )
