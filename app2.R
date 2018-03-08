@@ -238,7 +238,7 @@ server <- function(input, output) {
   output$work <- renderText({
     paste("Mortality Rate data retrieved from Kaggle.com
 
-Binge drinking data retrieved from INFO 201 class at the University of Washington Winter ‘18"
+Binge drinking data retrieved from INFO 201 class at the University of Washington Winter 18"
     )
   })
 }
