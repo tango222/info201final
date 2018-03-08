@@ -3,7 +3,6 @@
 library("dplyr")
 library("httr")
 library("jsonlite")
-source("APIKeys.R")
 library(Quandl)
 library(maps)
 library(ggplot2)
@@ -21,6 +20,8 @@ mort[ , 4:ncol(mort)] <- mort[ , 4:ncol(mort)] / 1000
 mort.simple <- select(mort, Location, FIPS, Category, Mortality.Rate..2010.)
 mort.state <- filter(mort.simple, !grepl(',', Location))
 mort.state <- filter(mort.state, Location != 'United States')
+
+mort.Alabama <- filter(mort, Location == "Alabama")
 
 #binge drinking information
 binge.drinking <- read.csv("data/binge_drinking.csv", stringsAsFactors = FALSE)
