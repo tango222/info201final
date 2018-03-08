@@ -50,6 +50,7 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   
+  #filters down binge mean information
   filter.binge.mean.state <- reactive({
     info <- select(binge.drinking.com, 1,2, paste0("mean.", input$Sex))
     info <- filter(info, state == location)
@@ -57,11 +58,13 @@ server <- function(input, output) {
     return(info)
   })
   
+  #filters down mortality rate information
   filter.mort.state.category <- reactive({
     info <- filter(mort.state, Category == input$category)
     return(info)
   })
   
+  #outputs the mortality rate map plot
   output$mort <- renderPlot({
     mort <- filter.mort.state.category()
     mort <- mutate(mort, region = tolower(Location))
@@ -75,6 +78,7 @@ server <- function(input, output) {
       theme_bw()
   })
   
+  #outputs the binge drinking map plot
   output$binge <- renderPlot({
     binge <- filter.binge.mean.state()
     binge <- mutate(binge, region = tolower(state))
@@ -87,6 +91,7 @@ server <- function(input, output) {
       theme_bw()
   })
   
+  #outputs the correlasion data map plot
   output$both <- renderPlot({
     mort <- filter.mort.state.category()
     mort <- mutate(mort, region = tolower(Location))
@@ -104,15 +109,18 @@ server <- function(input, output) {
       theme_bw()
   })
   
+  #binge drinking refined data table
   output$bingeTable <- renderDataTable({
     filter.binge.mean.state()
   })
   
+  #mortality rate refined data table
   output$mortTable <- renderDataTable({
     mort <- filter.mort.state.category()
     select(mort, 1,3,4)
   })
   
+  #combo data table
   output$bothTable <- renderDataTable({
     mort <- filter.mort.state.category()
     mort <- mutate(mort, region = tolower(Location))
@@ -124,6 +132,7 @@ server <- function(input, output) {
     both <- mutate(both, scale = both[ ,3] / both[ ,2])
   })
   
+  #description of binge drinking map and table
   output$bingeInfo <- renderText({
     if(!is.na(GetCountryAtPoint(input$plot_click$x, input$plot_click$y))){
       name <- GetCountryAtPoint(input$plot_click$x, input$plot_click$y)
@@ -148,6 +157,7 @@ server <- function(input, output) {
     return(i)
   })
   
+  #descripion of mortality rate map and table
   output$mortInfo <- renderText({
     if(!is.na(GetCountryAtPoint(input$plot_clicks$x, input$plot_clicks$y))){
       name <- GetCountryAtPoint(input$plot_clicks$x, input$plot_clicks$y)
@@ -166,6 +176,7 @@ server <- function(input, output) {
     return(i)
   })
   
+  #description of correlation data map and table
   output$bothInfo <- renderText({
     if(!is.na(GetCountryAtPoint(input$plot_clickss$x, input$plot_clickss$y))){
       name <- GetCountryAtPoint(input$plot_clickss$x, input$plot_clickss$y)
@@ -199,6 +210,7 @@ server <- function(input, output) {
     return(i)
   })
   
+  #description of project
   output$description <- renderText({
     paste(	"Our first dataset is made up of countrywide data on binge drinking. This includes the percentages of males and/or females who participate in binge drinking.",
            " Binge drinking is defined as consuming more than five drinks in one day.", 
@@ -212,6 +224,7 @@ server <- function(input, output) {
     )
   })
   
+  #conclusion
   output$conclusion <- renderText({
     paste("-Binge Drinking is more prevalent amongst males than females.
 
@@ -221,6 +234,7 @@ server <- function(input, output) {
     )
   })
   
+  #work cited
   output$work <- renderText({
     paste("Mortality Rate data retrieved from Kaggle.com
 
