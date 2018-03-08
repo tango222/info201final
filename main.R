@@ -1,6 +1,5 @@
 ##https://www.quandl.com/data/USMISERY-United-States-Misery-Index/usage/quickstart/r
 
-#####Olivia's work#######
 library("dplyr")
 library("httr")
 library("jsonlite")
@@ -8,6 +7,7 @@ source("APIKeys.R")
 library(Quandl)
 library(maps)
 library(ggplot2)
+library('eply')
 
 map.US <- map_data('state')
 map.US <- select(map.US, 1:5)
@@ -49,4 +49,3 @@ binge.drinking.female.avg <- select(binge.drinking.female.avg, 1, 2, 8)
 binge.drinking.com <- mutate(binge.drinking.both.avg, mean.male = binge.drinking.male.avg[ ,3], mean.female = binge.drinking.female.avg[ ,3])
 
 bing.drinking.com.state <- filter(binge.drinking.com, state == location)
-
